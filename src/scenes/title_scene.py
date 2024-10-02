@@ -1,3 +1,4 @@
+from .scene_fly_me_to_the_moon import SceneFlyMeToTheMoon
 from .test_song_scene import TestSongScene
 from ..class_bases.base_scene import *
 from ..constants import SONG_BUTTON_HEIGHT
@@ -11,9 +12,9 @@ class TitleScene(BaseScene):
         super().__init__(scene_manager)
 
         titles = [
-            'Fly me to the moon',
-            'My darling Clementine',
-            'All star'
+            ('Fly me to the moon', SceneFlyMeToTheMoon),
+            ('My darling Clementine', TestSongScene),
+            ('All star', TestSongScene)
         ]
 
         self.song_buttons = []
@@ -22,8 +23,9 @@ class TitleScene(BaseScene):
         for idx, title in enumerate(titles):
             new_button = SongButton(x_start,
                                     y_start + idx * (SONG_BUTTON_HEIGHT + 10),
-                                    title,
-                                    scene_manager)
+                                    title[0],
+                                    scene_manager,
+                                    title[1])
             self.song_buttons.append(new_button)
 
 
