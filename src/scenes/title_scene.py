@@ -1,14 +1,31 @@
 from .test_song_scene import TestSongScene
 from ..class_bases.base_scene import *
+from ..constants import SONG_BUTTON_HEIGHT
+from ..scene_objects.title_song_button import SongButton
+
 
 class TitleScene(BaseScene):
 
 
     def __init__(self, scene_manager):
         super().__init__(scene_manager)
-        self.font = pygame.font.Font(None, 74)  # Font for the title
-        self.button_font = pygame.font.Font(None, 48)  # Font for the button
-        self.button_rect = pygame.Rect(250, 300, 300, 100)
+
+        titles = [
+            'Fly me to the moon',
+            'My darling Clementine',
+            'All star'
+        ]
+
+        self.song_buttons = []
+        x_start = 10
+        y_start = 30
+        for idx, title in enumerate(titles):
+            new_button = SongButton(x_start,
+                                    y_start + idx * (SONG_BUTTON_HEIGHT + 10),
+                                    title,
+                                    scene_manager)
+            self.song_buttons.append(new_button)
+
 
 
     def update(self):
@@ -18,20 +35,11 @@ class TitleScene(BaseScene):
     def render(self, screen):
         screen.fill((255, 0, 0))
 
-        title_surface = self.font.render("Title scene", True, (255, 255, 255))
-        title_rect = title_surface.get_rect(center=(400, 200))
-        screen.blit(title_surface, title_rect)
-
-        # Render button
-        pygame.draw.rect(screen, (0, 255, 0), self.button_rect)  # Draw button
-        button_text = self.button_font.render("Play test song", True, (0, 0, 0))
-        button_text_rect = button_text.get_rect(center=self.button_rect.center)
-        screen.blit(button_text, button_text_rect)
+        for song_button in self.song_buttons:
+            song_button.draw(screen)
 
 
     def process_input(self, events, pressed_keys):
 
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN and self.button_rect.collidepoint(event.pos):
-                new_scene = TestSongScene(self.scene_manager)
-                self.scene_manager.change_scene(new_scene)
+        for song_button in self.song_buttons:
+            song_button.check_press(events)
