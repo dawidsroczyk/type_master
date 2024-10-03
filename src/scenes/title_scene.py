@@ -1,8 +1,9 @@
 from .scene_fly_me_to_the_moon import SceneFlyMeToTheMoon
 from .test_song_scene import TestSongScene
 from ..class_bases.base_scene import *
-from ..constants import SONG_BUTTON_HEIGHT
+from ..constants import SONG_BUTTON_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT
 from ..scene_objects.title_song_button import SongButton
+import os
 
 
 class TitleScene(BaseScene):
@@ -28,6 +29,9 @@ class TitleScene(BaseScene):
                                     title[1])
             self.song_buttons.append(new_button)
 
+        background_image = pygame.image.load(os.path.join('resources', 'coffee_shop.png'))
+        background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.background_image = background_image
 
 
     def update(self):
@@ -35,7 +39,8 @@ class TitleScene(BaseScene):
 
 
     def render(self, screen):
-        screen.fill((255, 0, 0))
+        #screen.fill((255, 0, 0))
+        screen.blit(self.background_image, (0, 0))
 
         for song_button in self.song_buttons:
             song_button.draw(screen)
