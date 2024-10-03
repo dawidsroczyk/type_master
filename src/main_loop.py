@@ -19,6 +19,7 @@ def main_loop(scene_manager):
             filtered_events.append(event)
 
         active_scene.process_input(filtered_events, pressed_keys)
+        active_scene.update()
         active_scene.render(screen)
 
         pygame.display.flip()

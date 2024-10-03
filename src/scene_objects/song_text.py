@@ -3,6 +3,7 @@
 from src.constants import SONG_TEXT_OFFSET, SCREEN_WIDTH, SONG_TEXT_HEIGHT
 from src.scene_objects.text import Text
 import pygame
+import src.constants as consts
 import random
 
 class SongText(Text):
@@ -11,6 +12,10 @@ class SongText(Text):
         # super().__init__(SONG_TEXT_OFFSET, y, SCREEN_WIDTH - 2 * SONG_TEXT_OFFSET, SONG_TEXT_HEIGHT, text)
         self.font = pygame.font.Font(None, 74)
         self.song_scene = song_scene
+        self.y = y
+        self.desired_y = y
+        self.move_speed = 10
+        self.clock = pygame.time.Clock()
         self.active = False
         self.highlighted_idx = -1
 
@@ -30,6 +35,18 @@ class SongText(Text):
             cur_word.append(char)
         if len(cur_word) > 0:
             self.words.append(cur_word)
+
+    def update(self):
+
+        delta_time = self.clock.tick(consts.FPS) / 1000.0
+        self.y += (self.desired_y - self.y) * delta_time * self.move_speed
+
+        for char in self.chars:
+            char.set_pos(char.x, int(self.y))
+
+    def change_y_pos(self, y_delta):
+        self.desired_y += y_delta
+
 
     def draw(self, screen):
 
@@ -89,6 +106,7 @@ class SongText(Text):
 
     def set_not_active(self):
         self.active = False
+
 
 
 def calculate_text_length(text: str, font: pygame.font):
