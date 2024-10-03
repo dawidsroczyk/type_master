@@ -58,7 +58,8 @@ class SongScene(BaseScene):
         self.text_y += SONG_TEXT_HEIGHT
 
     def update(self):
-        pass
+        for song_text in self.song_texts:
+            song_text.update()
 
     def render(self, screen):
         screen.fill((0, 0, 255))
@@ -77,6 +78,9 @@ class SongScene(BaseScene):
 
         self.song_texts[self.current_line_idx].choose_letter(0)
         self.song_texts[self.current_line_idx].set_active()
+
+        for song_text in self.song_texts:
+            song_text.change_y_pos(-SONG_TEXT_HEIGHT)
 
     def process_input(self, events, pressed_keys):
 
